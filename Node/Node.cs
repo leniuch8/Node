@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,36 +11,15 @@ namespace Node
 {
     class Node
     {
-        public int Id
-        {
-            get; set;
-        }
-        public int listeningPort
-        {
-            get;
-        }
-        public int sendingPort
-        {
-            get;
-        }
-        private DataListener listener;
-        private DataSender sender;
+        private int id { get; }
         public Node() { }
-        public Node(int Id, int listeningPort, int sendingPort)
+        public Node(int id)
         {
-            this.Id = Id;
-            this.listeningPort = listeningPort;
-            this.sendingPort = sendingPort;
-            configuration();
+            this.id = id;
         }
-        private void configuration()
+        public NodeElement AddNodeElement(int outputPort, int inputPort, string ipAddress)
         {
-            this.listener = new DataListener(this.listeningPort);
-            this.sender = new DataSender();
-        }
-        public static void onDataReceived(string data)
-        {
-            Console.WriteLine(data);
+            return new NodeElement(outputPort, inputPort, ipAddress);
         }
     }
 }
