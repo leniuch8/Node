@@ -15,15 +15,14 @@ namespace Node
     {
         static void Main(string[] args)
         {
-            /** TODO: Wczytanie konfiguracji portow + NODE CONTROLLER zamiast tego**/
             Node node = new Node(1);
-            node.SendMessage(node.NodeList[1025],1026);
+            node.SendMessage(node.NodeList[1025],1026, "siema kurwa|127.0.0.1|1028|21322");
             System.Threading.Thread.Sleep(100);
-            node.SendMessage(node.NodeList[1027], 1024);
+            node.SendMessage(node.NodeList[1027], 1024, "co tam|127.0.0.1|1023|123213");
             System.Threading.Thread.Sleep(100);
-            node.SendMessage(node.NodeList[1029], 1030);
+            node.SendMessage(node.NodeList[1029], 1030, "a chuj XD|127.0.0.1|1025|1024");
             System.Threading.Thread.Sleep(100);
-            node.SendMessage(node.NodeList[1031], 1038);
+            node.SendMessage(node.NodeList[1031], 1028, "klool |127.0.0.1|1025|1025");
             Console.Read();
         }
     }

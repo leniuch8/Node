@@ -80,8 +80,19 @@ namespace Node
                     string request = await reader.ReadLineAsync();
                     if (request != null)
                     {
-                        Console.WriteLine("Received service request: " + request);
-                        string response = this.InputPort+": ACK";
+                        string[] receivedData = request.Split('|');
+                        string data = receivedData[0];
+                        string destinationIp = receivedData[1];
+                        int destinationPort = Convert.ToInt32(receivedData[2]);
+                        Console.WriteLine(receivedData[3]);
+                        int waveLength = Int32.Parse(receivedData[3]);
+                        string message = "RECEIVED MESSAGE FROM " +
+                                         ((IPEndPoint) tcpClient.Client.RemoteEndPoint).ToString() + ": " +
+                                         receivedData[0] + " Destination IP: " + receivedData[1] + " Destination Port: " +
+                                         receivedData[2] + " WaveLength: " + receivedData[3];
+                        Console.WriteLine("dupa");
+                        string response = this.InputPort + ": ACK";
+                        Node.MessageQueue.Enqueue(new NodeMessage(data,destinationIp,destinationPort,waveLength)); // Dodaje do kolejki w NODE, tam sprawdza gdzie wyslac i moze obslugiwac FIFO.
                         await writer.WriteLineAsync(response);
                     }
                     else
@@ -105,9 +116,7 @@ namespace Node
                 StreamWriter writer = new StreamWriter(networkStream);
                 StreamReader reader = new StreamReader(networkStream);
                 writer.AutoFlush = true;
-                string requestData = this.OutputPort + ": wiadomosc" +
-                  data + "&eor"; // TODO: wyswietlania w logach, zmiana formatu wiadomosci
-                Node.MessageQueue.Enqueue(new NodeMessage(data, local, this.OutputPort)); // Dodaje do kolejki w NODE, tam sprawdza gdzie wyslac i moze obslugiwac FIFO.
+                string requestData = data; // TODO: wyswietlania w logach, zmiana formatu wiadomosci
                 await writer.WriteLineAsync(requestData);
                 string response = await reader.ReadLineAsync();
                 Console.WriteLine(response);

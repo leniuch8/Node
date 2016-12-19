@@ -22,7 +22,8 @@ namespace Node
             this.id = id;
             MessageQueue = new Queue<NodeMessage>();
             NodeList = new Dictionary<int, NodeElement>();
-            XmlParse();;
+            XmlParse();
+            Task.Run(() => NodeAction());
         }
 
         public void XmlParse()
@@ -51,8 +52,13 @@ namespace Node
         {
             while (true)
             {
-                var message = MessageQueue.Dequeue();
-                //TODO: Interpretacja.
+                if (MessageQueue.Count > 0)
+                {
+                    var message = MessageQueue.Dequeue();
+                    Console.WriteLine("Odebrana wiadomosc : " + message.data);
+
+                    //TODO: Interpretacja.
+                }
             }
         }
         /* Laczy wezel klienta do wysylania z portem na ktory ma wysylac */
@@ -61,9 +67,9 @@ namespace Node
             await nodeElement.ConnectClient("127.0.0.1", port);
         }
         /* Wysyla Request z Node do klienta na dany port */
-        public async void SendMessage(NodeElement node, int port)
+        public async void SendMessage(NodeElement node, int port, string data)
         {
-            await node.SendRequest("127.0.0.1", port, "xd");
+            await node.SendRequest("127.0.0.1", port, data);
         }
         /** Rozlacza element **/
         private void DisconnectNodeElement(int nodeElementPort)

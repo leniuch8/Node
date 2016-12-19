@@ -8,13 +8,16 @@ namespace Node
 {
     class NodeMessage
     {
-        private string data;
-        private string ip;
-        private int port;
-
-        public NodeMessage(string data, string ip, int port)
+        public string data { get; }
+        public string ip { get; }
+        public int destinationPort { get; } //port na ktory ma trafic wiadomosc
+        public int waveLength { get; }
+        public NodeMessage(string data, string ip, int destinationPort, int waveLength)
         {
-            //TODO: Wiadomosc do przeslania do NODE, dodac dlugosc
+            this.data = data;
+            this.ip = ip;
+            this.destinationPort = destinationPort;
+            this.waveLength = waveLength;
         }
 
     }
