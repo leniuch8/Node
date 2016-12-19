@@ -106,40 +106,17 @@ namespace Node
                 StreamReader reader = new StreamReader(networkStream);
                 writer.AutoFlush = true;
                 string requestData = this.OutputPort + ": wiadomosc" +
-                  data + "&eor"; // 'End-of-request'
+                  data + "&eor"; // TODO: wyswietlania w logach, zmiana formatu wiadomosci
+                Node.MessageQueue.Enqueue(new NodeMessage(data, local, this.OutputPort)); // Dodaje do kolejki w NODE, tam sprawdza gdzie wyslac i moze obslugiwac FIFO.
                 await writer.WriteLineAsync(requestData);
                 string response = await reader.ReadLineAsync();
-                // this._tcpClient.Close();
-                // Console.WriteLine(response);
+                Console.WriteLine(response);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.GetBaseException().ToString());
             }
         }
-        /*public async Task<string> SendRequestz(string local, int port, string data)
-        {
-            try
-            {
-                IPAddress ipAddress = IPAddress.Parse(local);
-                await this._tcpClient.ConnectAsync(ipAddress, port); // Connect
-                NetworkStream networkStream = _tcpClient.GetStream();
-                StreamWriter writer = new StreamWriter(networkStream);
-                StreamReader reader = new StreamReader(networkStream);
-                writer.AutoFlush = true;
-                string requestData = this.OutputPort+": wiadomosc" +
-                  data + "&eor"; // 'End-of-request'
-                await writer.WriteLineAsync(requestData);
-                string response = await reader.ReadLineAsync();
-               // this._tcpClient.Close();
-               // Console.WriteLine(response);
-                return response;
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }*/
     }
 }
 
